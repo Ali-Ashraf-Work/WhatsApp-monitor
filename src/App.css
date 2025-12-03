@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@layer base, components, utilities;
+
+@theme {
+  --color-brand-primary-900: #057e54;
+  --color-brand-primary-700: #128c7e;
+  --color-brand-primary-500: #25d366;
+  --color-brand-primary-100: #dcf8c6;
+
+  /* Accent */
+  --color-accent-blue-500: #34b7f1;
+
+  /* Backgrounds */
+  --color-background-default: #f7f5f3;
+  --color-background-chat: #ece5dd;
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.15s ease-out;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.18s ease-out;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+}
