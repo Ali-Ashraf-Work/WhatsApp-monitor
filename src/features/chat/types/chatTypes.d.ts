@@ -49,7 +49,7 @@ export interface Message {
   createdAt: string;
   updatedAt: string;
   fromMe: boolean;
-  status?: number;
+  status?: string;
 }
 export interface Agent {
   id: string;

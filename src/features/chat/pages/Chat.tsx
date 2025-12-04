@@ -12,12 +12,13 @@ import { socket } from "../../../lib/socket";
 import WhatsAppLoadingScreen from "../components/WhatsAppLoadingScreen";
 import ConversationPlaceholder from "../components/ConversationPlaceholder";
 import MessageSkeleton from "../components/MessageSkeleton";
+import { BiMenu, BiX } from "react-icons/bi";
 
 export default function Chat() {
-
   const [page, setPage] = useState<number>(1);
-  const limit = 20 as number
+  const limit = 20 as number;
   const [filterType, setFilterType] = useState<'all' | 'chats' | 'groups'>('all');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { numberId } = useParams();
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
@@ -51,13 +52,16 @@ export default function Chat() {
         ? lastPage.pagination.nextCursor
         : undefined,
     initialPageParam: null,
-    enabled: !!activeConversationId,
+    enabled: !!activeConversationId && !!numberId,
   });
 
-  const messages = messagesData?.pages.flatMap((page) => page.data.messages.reverse()).reverse() || [];
+  // Fix: Reverse pages array so older messages come first, then flatten
+  const messages = messagesData?.pages.slice().reverse().flatMap((page) => page.data.messages) || [];
 
-
+  // Real-time message handling
   useEffect(() => {
+    if (!numberId) return;
+
     socket.on("whatsapp:authenticated", (data) => {
       console.log("authenticated:", data);
     });
@@ -67,6 +71,7 @@ export default function Chat() {
     });
 
     socket.on("whatsapp:message", (newMessage) => {
+      console.log("newMessage:", newMessage);
       const currentConvId = `${numberId}:${activeConversationId}`;
 
       // Update messages if the message belongs to the active conversation
@@ -90,7 +95,7 @@ export default function Chat() {
               );
 
               if (!messageExists) {
-                const newMessages = [...lastPage.data.messages, newMessage,];
+                const newMessages = [...lastPage.data.messages, newMessage];
                 newPages[lastPageIndex] = {
                   ...lastPage,
                   data: {
@@ -200,46 +205,86 @@ export default function Chat() {
     };
   }, [numberId, queryClient, activeConversationId]);
 
+  // Get active conversation details
+  const activeConversation = conversations?.data?.find(
+    (conv: Conversation) => conv.id === activeConversationId
+  );
+
   return (
-    <div className="grid grid-cols-10 relative">
-      <div className="col-span-3 h-screen sticky top-0 left-0 bottom-0 bg-white border-r-2 border-background-default">
+    <div className="flex h-screen bg-black-900 overflow-hidden">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black-pure bg-opacity-70 z-40 lg:hidden backdrop-blur-sm"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Conversations */}
+      <div className={`
+        fixed lg:relative
+        w-full sm:w-96
+        h-full
+        bg-elegant-purple
+        border-r border-elegant-purple
+        transform transition-transform duration-300 ease-out
+        z-50 lg:z-0
+        flex flex-col
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
         {numberId ? (
           <>
-            {/* Filter Controls */}
-            <div className="bg-white border-b border-gray-200 p-3">
-              <div className="flex gap-2">
+            {/* Sidebar Header */}
+            <div className="bg-elegant-card border-b border-elegant-purple p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-bold text-text-primary">Conversations</h2>
+                <button
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="lg:hidden p-2 hover:bg-black-600 rounded-lg transition-colors"
+                >
+                  <BiX className="w-6 h-6 text-text-primary" />
+                </button>
+              </div>
+
+              {/* Compact Filter Pills */}
+              <div className="flex gap-1.5">
                 <button
                   onClick={() => setFilterType('all')}
-                  className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${filterType === 'all'
-                      ? 'bg-primary-default text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 ${filterType === 'all'
+                    ? 'bg-accent-purple text-text-primary shadow-elegant-purple'
+                    : 'bg-black-700 text-text-muted hover:bg-black-600 hover:text-text-secondary'
                     }`}
                 >
                   All
                 </button>
                 <button
                   onClick={() => setFilterType('chats')}
-                  className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${filterType === 'chats'
-                      ? 'bg-primary-default text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 ${filterType === 'chats'
+                    ? 'bg-accent-blue text-text-primary shadow-elegant-blue'
+                    : 'bg-black-700 text-text-muted hover:bg-black-600 hover:text-text-secondary'
                     }`}
                 >
                   Chats
                 </button>
                 <button
                   onClick={() => setFilterType('groups')}
-                  className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${filterType === 'groups'
-                      ? 'bg-primary-default text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 ${filterType === 'groups'
+                    ? 'bg-accent-teal text-text-primary shadow-elegant-teal'
+                    : 'bg-black-700 text-text-muted hover:bg-black-600 hover:text-text-secondary'
                     }`}
                 >
                   Groups
                 </button>
               </div>
             </div>
+
+            {/* Conversation List */}
             <ConversationList
               conversations={conversations?.data || []}
-              setActiveConversationId={setActiveConversationId}
+              setActiveConversationId={(id) => {
+                setActiveConversationId(id);
+                setIsSidebarOpen(false); // Close sidebar on mobile when selecting
+              }}
               activeConversationId={activeConversationId}
               page={page}
               setPage={setPage}
@@ -252,15 +297,48 @@ export default function Chat() {
           <ConversationPlaceholder />
         )}
       </div>
-      <div className="col-span-7">
-        {!activeConversationId ? (
-          <ConversationPlaceholder />
-        ) : isLoadingMessages ? (
-          <MessageSkeleton />
-        ) : (
-          messages && <MessagesList messages={messages} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage} />
+
+      {/* Messages Area */}
+      <div className="flex-1 flex flex-col bg-elegant-subtle overflow-hidden">
+        {/* Messages Header */}
+        {activeConversation && (
+          <div className="bg-elegant-card border-b border-elegant px-4 py-3 flex items-center gap-3 shadow-elegant">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-2 hover:bg-black-600 rounded-lg transition-colors"
+            >
+              <BiMenu className="w-6 h-6 text-text-primary" />
+            </button>
+
+            {/* Active Contact Info */}
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="bg-linear-to-br from-accent-purple to-accent-blue text-text-primary rounded-full w-10 h-10 flex items-center justify-center shrink-0 font-bold shadow-elegant">
+                {activeConversation.name?.[0]?.toUpperCase() || activeConversation.phone[0]}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-text-primary truncate">
+                  {activeConversation.name || "Unknown Customer"}
+                </h3>
+                <p className="text-xs text-text-muted font-mono truncate">
+                  {activeConversation.phone}
+                </p>
+              </div>
+            </div>
+          </div>
         )}
+
+        {/* Messages Content */}
+        <div className="flex-1 overflow-hidden">
+          {!activeConversationId ? (
+            <ConversationPlaceholder />
+          ) : isLoadingMessages ? (
+            <MessageSkeleton />
+          ) : (
+            messages && <MessagesList messages={messages} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage} />
+          )}
+        </div>
       </div>
+
       <WhatsAppLoadingScreen />
     </div>
   );

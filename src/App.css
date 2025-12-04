@@ -3,57 +3,303 @@
 @layer base, components, utilities;
 
 @theme {
-  --color-brand-primary-900: #057e54;
-  --color-brand-primary-700: #128c7e;
-  --color-brand-primary-500: #25d366;
-  --color-brand-primary-100: #dcf8c6;
+  /* ========================================
+     ELEGANT DARK THEME - SOPHISTICATED PALETTE
+     ======================================== */
 
-  /* Accent */
-  --color-accent-blue-500: #34b7f1;
+  /* Pure Black Shades */
+  --color-black-pure: #000000;
+  --color-black-900: #0a0a0a;
+  --color-black-800: #141414;
+  --color-black-700: #1e1e1e;
+  --color-black-600: #282828;
+  --color-black-500: #323232;
+  --color-black-400: #3c3c3c;
 
-  /* Backgrounds */
-  --color-background-default: #f7f5f3;
-  --color-background-chat: #ece5dd;
+  /* Elegant Accent Colors - Muted & Sophisticated */
+  --color-accent-purple: #8b7fb8;
+  --color-accent-blue: #6b8cae;
+  --color-accent-teal: #5a9a9a;
+  --color-accent-gold: #b8a078;
+  --color-accent-rose: #b88a8a;
+  --color-accent-sage: #8b9b8b;
+
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #d4d4d4;
+  --color-text-muted: #9a9a9a;
+  --color-text-subtle: #6a6a6a;
+
+  /* Semantic Colors */
+  --color-success: #6b9b6b;
+  --color-warning: #b8a078;
+  --color-error: #b87878;
+  --color-info: #6b8cae;
 }
 
 @layer utilities {
+  /* ========================================
+     ELEGANT GRADIENTS
+     ======================================== */
+
+  .bg-elegant-dark {
+    background: linear-gradient(135deg, #000000 0%, #1e1e1e 100%);
+  }
+
+  .bg-elegant-purple {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1520 50%, #0a0a0a 100%);
+  }
+
+  .bg-elegant-blue {
+    background: linear-gradient(135deg, #0a0a0a 0%, #0f1520 50%, #0a0a0a 100%);
+  }
+
+  .bg-elegant-teal {
+    background: linear-gradient(135deg, #0a0a0a 0%, #0f1a1a 50%, #0a0a0a 100%);
+  }
+
+  .bg-elegant-card {
+    background: linear-gradient(135deg, #141414 0%, #1e1e1e 100%);
+  }
+
+  .bg-elegant-elevated {
+    background: linear-gradient(135deg, #1e1e1e 0%, #282828 100%);
+  }
+
+  .bg-elegant-subtle {
+    background: linear-gradient(180deg, #0a0a0a 0%, #141414 100%);
+  }
+
+  .bg-elegant-glow {
+    background: radial-gradient(circle at top, #1a1520 0%, #000000 100%);
+  }
+
+  .bg-elegant-animated {
+    background: linear-gradient(-45deg, #000000, #0f1520, #1a1520, #0f1520, #000000);
+    background-size: 400% 400%;
+  }
+
+  /* ========================================
+     REFINED SHADOWS
+     ======================================== */
+
+  .shadow-elegant {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  .shadow-elegant-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
+      0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  }
+
+  .shadow-elegant-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+      0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  }
+
+  .shadow-elegant-purple {
+    box-shadow: 0 4px 12px rgba(139, 127, 184, 0.15),
+      0 2px 6px rgba(139, 127, 184, 0.1);
+  }
+
+  .shadow-elegant-blue {
+    box-shadow: 0 4px 12px rgba(107, 140, 174, 0.15),
+      0 2px 6px rgba(107, 140, 174, 0.1);
+  }
+
+  .shadow-elegant-teal {
+    box-shadow: 0 4px 12px rgba(90, 154, 154, 0.15),
+      0 2px 6px rgba(90, 154, 154, 0.1);
+  }
+
+  .shadow-inner-elegant {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  /* ========================================
+     ELEGANT BORDERS
+     ======================================== */
+
+  .border-elegant {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .border-elegant-purple {
+    border: 1px solid rgba(139, 127, 184, 0.3);
+  }
+
+  .border-elegant-blue {
+    border: 1px solid rgba(107, 140, 174, 0.3);
+  }
+
+  .border-elegant-teal {
+    border: 1px solid rgba(90, 154, 154, 0.3);
+  }
+
+  .border-elegant-gold {
+    border: 1px solid rgba(184, 160, 120, 0.3);
+  }
+
+  /* ========================================
+     SMOOTH ANIMATIONS
+     ======================================== */
+
   @keyframes fadeIn {
     from {
       opacity: 0;
     }
+
     to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
       opacity: 1;
     }
   }
 
   @keyframes scaleIn {
     from {
-      transform: scale(0.95);
+      transform: scale(0.98);
       opacity: 0;
     }
+
     to {
       transform: scale(1);
       opacity: 1;
     }
   }
 
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
   .animate-fadeIn {
-    animation: fadeIn 0.15s ease-out;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.4s ease-out;
   }
 
   .animate-scaleIn {
-    animation: scaleIn 0.18s ease-out;
+    animation: scaleIn 0.3s ease-out;
   }
 
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
   .animate-shimmer {
-    animation: shimmer 2s infinite;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .animate-gradientFlow {
+    animation: gradientFlow 8s ease infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* ========================================
+     ELEGANT HOVER STATES
+     ======================================== */
+
+  .hover-elegant {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-elegant:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.4);
+  }
+
+  .hover-elegant-scale:hover {
+    transform: scale(1.02);
+  }
+
+  .hover-elegant-glow:hover {
+    box-shadow: 0 0 20px rgba(139, 127, 184, 0.2);
+  }
+
+  /* ========================================
+     CUSTOM SCROLLBAR
+     ======================================== */
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #8b7fb8 0%, #6b8cae 100%);
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #9b8fc8 0%, #7b9cbe 100%);
+  }
+
+  /* ========================================
+     UTILITY CLASSES
+     ======================================== */
+
+  .backdrop-blur-elegant {
+    backdrop-filter: blur(8px);
+    background-color: rgba(10, 10, 10, 0.8);
+  }
+
+  .text-elegant-gradient {
+    background: linear-gradient(135deg, #8b7fb8 0%, #6b8cae 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .divider-elegant {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   }
 }

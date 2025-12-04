@@ -1,12 +1,11 @@
-import React, { useRef, memo } from "react";
+import { useRef, memo } from "react";
 import type { Message } from "../types/chatTypes";
-import { BiCheck, BiCheckDouble, BiDownload, BiPause, BiPlay, BiMap } from "react-icons/bi";
+import { BiCheck, BiCheckDouble, BiDownload, BiMap } from "react-icons/bi";
 import { FiFileText } from "react-icons/fi";
-import { formatTime, handleAudioToggle } from "../utils/helpers";
+import { formatTime } from "../utils/helpers";
+import VoiceMessagePlayer from "./VoiceMessege";
 
 const MessageComponent = memo(function MessageComponent({ message }: { message: Message }) {
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const isIncoming = message.direction === "INCOMING" || message.fromMe === false;
@@ -32,7 +31,7 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
               className="w-full h-auto"
             />
             {message.caption && (
-              <p className="mt-2 text-sm">{message.caption}</p>
+              <p className="mt-2 text-sm text-text-primary">{message.caption}</p>
             )}
           </div>
         );
@@ -57,7 +56,7 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
               className="w-full h-auto"
             />
             {message.caption && (
-              <p className="mt-2 text-sm">{message.caption}</p>
+              <p className="mt-2 text-sm text-text-primary">{message.caption}</p>
             )}
           </div>
         );
@@ -68,20 +67,20 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${locationContent?.latitude || 0},${locationContent?.longitude || 0}`;
 
         return (
-          <div className="bg-gray-100 p-1 rounded-lg overflow-hidden min-w-[200px]">
-            {/* Map Preview Placeholder - using a static color or pattern since we don't have a map key */}
-            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block h-32 bg-brand-primary-50 relative group">
-              <div className="absolute inset-0 flex items-center justify-center bg-brand-primary-50/50 group-hover:bg-brand-primary-50/30 transition-colors">
-                <BiMap className="w-12 h-12 text-brand-primary-50 opacity-80" />
+          <div className="bg-dark-elevated p-1 rounded-lg overflow-hidden min-w-[200px] neon-border-cyan">
+            {/* Map Preview Placeholder */}
+            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block h-32 bg-dark-card relative group">
+              <div className="absolute inset-0 flex items-center justify-center bg-dark-bg-tertiary/50 group-hover:bg-dark-bg-tertiary/30 transition-colors">
+                <BiMap className="w-12 h-12 text-neon-cyan opacity-80" />
               </div>
             </a>
 
             <div className="p-2">
-              <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary-500 hover:underline text-sm block mb-1">
+              <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-neon-cyan hover:underline text-sm block mb-1">
                 View on Google Maps
               </a>
               {locationContent?.description && (
-                <p className="text-xs text-gray-600 whitespace-pre-wrap">{locationContent.description}</p>
+                <p className="text-xs text-text-secondary whitespace-pre-wrap">{locationContent.description}</p>
               )}
             </div>
           </div>
@@ -92,8 +91,8 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
         const contactContent = safeParse(message?.content || "");
 
         return (
-          <div className="bg-gray-100 p-3 rounded-lg flex items-center gap-3 min-w-[200px]">
-            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-bold overflow-hidden">
+          <div className="bg-dark-elevated p-3 rounded-lg flex items-center gap-3 min-w-[200px] neon-border-cyan">
+            <div className="w-10 h-10 bg-dark-card rounded-full flex items-center justify-center text-neon-cyan font-bold overflow-hidden">
               {contactContent?.photoBase64 ? (
                 <img src={`data:image/jpeg;base64,${contactContent.photoBase64}`} alt={contactContent?.name} className="w-full h-full object-cover" />
               ) : (
@@ -101,8 +100,8 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-900 truncate text-sm">{contactContent?.name || "Unknown Contact"}</p>
-              <p className="text-xs text-gray-500 truncate">{contactContent?.phone || "No phone number"}</p>
+              <p className="font-semibold text-text-primary truncate text-sm">{contactContent?.name || "Unknown Contact"}</p>
+              <p className="text-xs text-text-secondary truncate">{contactContent?.phone || "No phone number"}</p>
             </div>
           </div>
         );
@@ -120,7 +119,7 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
               Your browser does not support the video tag.
             </video>
             {message.caption && (
-              <p className="mt-2 text-sm">{message.caption}</p>
+              <p className="mt-2 text-sm text-text-primary">{message.caption}</p>
             )}
           </div>
         );
@@ -128,35 +127,10 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
       case "AUDIO":
         return (
           <div
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg ${isIncoming ? "bg-gray-100" : "bg-blue-50"
+            className={`flex items-center gap-3 rounded-lg ${isIncoming ? " text-white neon-border-cyan" : "bg-dark-card neon-border-magenta"
               }`}
           >
-            <button
-              onClick={() =>
-                handleAudioToggle(audioRef, isPlaying, setIsPlaying)
-              }
-              className={`p-2 rounded-full transition-colors ${isIncoming
-                ? "bg-gray-200 hover:bg-gray-300"
-                : "bg-blue-100 hover:bg-blue-200"
-                }`}
-            >
-              {isPlaying ? (
-                <BiPause className="w-5 h-5" />
-              ) : (
-                <BiPlay className="w-5 h-5" />
-              )}
-            </button>
-            <audio
-              ref={audioRef}
-              src={message.mediaUrl || ""}
-              onEnded={() => setIsPlaying(false)}
-              className="hidden"
-            />
-            <div className="flex-1">
-              <div className="h-1 bg-gray-300 rounded-full">
-                <div className="h-full bg-blue-500 rounded-full w-0"></div>
-              </div>
-            </div>
+            <VoiceMessagePlayer audioUrl={message.mediaUrl || ""} />
           </div>
         );
 
@@ -164,23 +138,23 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
         return (
           <div
             className={`flex items-center gap-3 px-4 py-3 rounded-lg border ${isIncoming
-              ? "bg-gray-50 border-gray-200"
-              : "bg-brand-primary-100 border-blue-100"
+              ? "bg-dark-elevated neon-border-cyan"
+              : "bg-dark-card neon-border-magenta"
               }`}
           >
-            <FiFileText className="w-8 h-8 text-gray-600" />
+            <FiFileText className="w-8 h-8 text-neon-cyan" />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">
+              <p className="text-sm font-medium truncate text-text-primary">
                 {message.fileName || "Document"}
               </p>
-              <p className="text-xs text-gray-500">PDF Document</p>
+              <p className="text-xs text-text-secondary">PDF Document</p>
             </div>
             <a
               href={message.mediaUrl || "#"}
               download={message.fileName || "document.pdf"}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:bg-dark-bg-tertiary rounded-full transition-colors text-neon-cyan"
             >
               <BiDownload className="w-5 h-5" />
             </a>
@@ -189,7 +163,10 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
 
       case "TEXT":
       default:
-        return <p className="text-sm whitespace-pre-wrap break-all">{message.content}</p>;
+        return <div className="px-4 py-2.5 flex items-center gap-3">
+
+          <p className="text-sm whitespace-pre-wrap break-all text-text-primary">{message.content}</p>
+        </div>
     }
   };
 
@@ -203,15 +180,15 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
           }`}
       >
         {/* Sender name */}
-        <span className="text-xs text-gray-500 mb-1 px-2">
+        <span className="text-xs text-text-muted mb-1 px-2">
           {message.senderName}
         </span>
 
-        {/* Message bubble */}
+        {/* Message bubble - DISTINCT STYLES */}
         <div
-          className={`rounded-2xl px-4 py-2 shadow-sm ${isIncoming
-            ? "bg-white border border-gray-200 rounded-tl-none"
-            : "bg-brand-primary-100 text-black rounded-tr-none"
+          className={`rounded-2xl border overflow-hidden transition-all duration-300 shadow-elegant ${isIncoming
+            ? "bg-linear-to-br from-teal-400/10 to-yellow-600/10 hover:bg-linear-to-br hover:from-teal-500/20 hover:to-yellow-700/20 transition-colors border-accent-teal rounded-tl-none hover:shadow-elegant-teal"
+            : "bg-linear-to-r from-red-200/10 to-pink-600/20  duration-300 hover:bg-linear-to-br hover:from-red-500/10 hover:to-pink-700/10 transition-all border-accent-purple rounded-tr-none"
             }`}
         >
           {renderMediaContent()}
@@ -219,19 +196,19 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
 
         {/* Timestamp */}
         <div className="flex items-center gap-1 mt-1 px-2">
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-text-muted">
             {formatTime(message.timestamp)}
           </span>
           {!isIncoming && (
-            <span className="text-gray-400">
-              {message.status === 3 ? (
-                <BiCheckDouble className="w-4 h-4 text-blue-500" />
-              ) : message.status === 2 ? (
+            <span className="text-text-muted">
+              {message.status === 'SEEN' || message.status === 'PLAYED' ? (
+                <BiCheckDouble className="w-4 h-4 text-neon-cyan" />
+              ) : message.status === 'DELIVERED' ? (
                 <BiCheckDouble className="w-4 h-4" />
-              ) : message.status === 1 ? (
+              ) : message.status === 'SENT' ? (
                 <BiCheck className="w-4 h-4" />
               ) : (
-                <BiCheck className="w-4 h-4 text-gray-300" />
+                <BiCheck className="w-4 h-4 text-text-muted" />
               )}
             </span>
           )}

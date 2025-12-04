@@ -11,6 +11,7 @@ import { socket } from "../../../lib/socket";
 import { FaUserAlt } from "react-icons/fa";
 import { useAuthStore } from "../../auth/store/authStore";
 import { Link } from "react-router-dom";
+
 export default function AgentList() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuthStore();
@@ -40,44 +41,53 @@ export default function AgentList() {
       <div>
         <CreateForm isOpen={isOpen} onClose={onCLose} />
       </div>
-      <div className="flex flex-col h-full">
-        <div className="font-bold bg-linear-to-br from-brand-primary-500 to-brand-primary-900 text-white px-4 py-3 ">
+      <div className="flex flex-col h-full bg-elegant-purple">
+        {/* Header */}
+        <div className="bg-elegant-card border-b border-elegant-purple px-4 py-4 shadow-elegant">
           <div className="flex items-start justify-between">
             <div className="flex items-center justify-start gap-2">
-              <RiSimCard2Line size={25} />
-              <span className="font-bold text-xl ">Agent List</span>
+              <div className="p-2 bg-linear-to-br from-accent-purple to-accent-blue rounded-lg shadow-elegant-purple">
+                <RiSimCard2Line size={24} className="text-text-primary" />
+              </div>
+              <div>
+                <span className="font-bold text-xl text-text-primary">Agent List</span>
+                <p className="text-xs text-text-muted mt-0.5">Select number to view conversations</p>
+              </div>
             </div>
             {!isError && !isLoading && (
               <div className="flex items-center justify-end gap-2">
-                <div
-                  className="cursor-pointer bg-white/20 p-2 rounded-2xl backdrop-blur-2xl"
+                <button
+                  className="p-2.5 bg-accent-purple hover:bg-accent-blue rounded-lg transition-all duration-300 hover-elegant shadow-elegant-purple"
                   onClick={() => setIsOpen(true)}
                 >
-                  <IoMdAdd size={20} />
-                </div>
-                {
-                  isSuperAdmin &&
-                  <Link to="/users" className="cursor-pointer bg-white/20 p-2 rounded-2xl backdrop-blur-2xl">
-                    <FaUserAlt size={20} />
+                  <IoMdAdd size={20} className="text-text-primary" />
+                </button>
+                {isSuperAdmin && (
+                  <Link
+                    to="/users"
+                    className="p-2.5 bg-accent-teal hover:bg-accent-blue rounded-lg transition-all duration-300 hover-elegant shadow-elegant-teal"
+                  >
+                    <FaUserAlt size={18} className="text-text-primary" />
                   </Link>
-                }
+                )}
               </div>
             )}
           </div>
-          <div className="text-xs font-medium py-1 px-1">
-            select number to view conversation
-          </div>
         </div>
-        <div className="grid grid-cols-1 max-h-[calc(100vh-90px)] overflow-y-auto">
-          {agents ? (
-            agents.map((agent: Agent) => (
-              <AgentCard agent={agent} key={agent.id} />
-            ))
-          ) : (
-            <AgentCardSkeleton />
-          )}
-          {isLoading && <AgentCardSkeleton />}
-          {isError && <AgentCardSkeleton />}
+
+        {/* Agent Cards */}
+        <div className="flex-1 overflow-y-auto p-2">
+          <div className="space-y-2">
+            {agents ? (
+              agents.map((agent: Agent) => (
+                <AgentCard agent={agent} key={agent.id} />
+              ))
+            ) : (
+              <AgentCardSkeleton />
+            )}
+            {isLoading && <AgentCardSkeleton />}
+            {isError && <AgentCardSkeleton />}
+          </div>
         </div>
       </div>
     </>

@@ -57,18 +57,18 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black-pure/70 backdrop-blur-sm animate-fadeIn"
       onClick={() => onClose(false)}
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="relative bg-white rounded-2xl shadow-lg p-8 max-h-[90vh] overflow-y-auto w-[90%] md:max-w-3xl animate-scaleIn"
+        className="relative bg-elegant-card border border-elegant-purple rounded-2xl shadow-elegant-xl p-8 max-h-[90vh] overflow-y-auto w-[90%] md:max-w-3xl animate-scaleIn"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={() => onClose(false)}
-          className="absolute top-3 right-3 text-gray-500 hover:text-black transition"
+          className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors p-2 hover:bg-elegant-elevated rounded-lg"
           aria-label="Close modal"
         >
           <AiOutlineClose size={22} />

@@ -18,13 +18,13 @@ export default function Pagination({
     const isLastPage = page === totalPages;
 
     return (
-        <div className="flex items-center justify-center md:justify-between px-4 py-5 flex-col md:flex-row bg-white border-b border-gray-200 w-full flex-wrap">
+        <div className="flex items-center justify-center md:justify-between px-2 sm:px-4 py-3 sm:py-4 flex-col md:flex-row bg-elegant-card border-t border-elegant-purple w-full flex-wrap gap-2">
             <div className="flex items-center gap-2">
-                <p className="text-sm text-gray-600">
-                    Page <span className="font-semibold text-gray-900">{page}</span> of{" "}
-                    <span className="font-semibold text-gray-900">{totalPages}</span>
+                <p className="text-xs sm:text-sm text-text-secondary">
+                    Page <span className="font-semibold text-accent-purple">{page}</span> of{" "}
+                    <span className="font-semibold text-accent-purple">{totalPages}</span>
                 </p>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-text-muted">
                     ({total} total)
                 </span>
             </div>
@@ -33,23 +33,23 @@ export default function Pagination({
                 <button
                     onClick={() => setPage(page - 1)}
                     disabled={isFirstPage || disabled}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${isFirstPage || disabled
-                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : "bg-brand-primary-100 text-gray-700 hover:bg-brand-primary-200 cursor-pointer"
+                    className={`flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${isFirstPage || disabled
+                            ? "bg-black-700 text-text-muted cursor-not-allowed opacity-50"
+                            : "bg-accent-purple text-text-primary hover-elegant shadow-elegant-purple cursor-pointer"
                         }`}
                 >
                     <BiChevronLeft className="w-4 h-4" />
-                    Previous
+                    <span className="hidden sm:inline">Previous</span>
                 </button>
                 <button
                     onClick={() => setPage(page + 1)}
                     disabled={isLastPage || disabled}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${isLastPage || disabled
-                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : "bg-brand-primary-100 text-gray-700 hover:bg-brand-primary-200 cursor-pointer"
+                    className={`flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${isLastPage || disabled
+                            ? "bg-black-700 text-text-muted cursor-not-allowed opacity-50"
+                            : "bg-accent-purple text-text-primary hover-elegant shadow-elegant-purple cursor-pointer"
                         }`}
                 >
-                    Next
+                    <span className="hidden sm:inline">Next</span>
                     <BiChevronRight className="w-4 h-4" />
                 </button>
             </div>

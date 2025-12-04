@@ -1,40 +1,47 @@
 import { RiLoader2Fill } from "react-icons/ri";
+import { BiQrScan } from "react-icons/bi";
 
 export default function QrModal({ qrCode }: { qrCode?: string }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* QR Code Display */}
       <div className="text-center">
-        <div className="inline-block p-4 bg-white border-4 border-green-500 rounded-2xl">
+        <div className="inline-block p-6 bg-white rounded-2xl shadow-elegant-xl border-4 border-accent-teal">
           {qrCode ? (
             <img src={qrCode} alt="QR Code" className="w-64 h-64" />
           ) : (
             <div className="w-64 h-64 flex items-center justify-center">
-              <RiLoader2Fill className="w-12 h-12 animate-spin text-green-500" />
+              <RiLoader2Fill className="w-12 h-12 animate-spin text-accent-purple" />
             </div>
           )}
         </div>
       </div>
 
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-        <h3 className="font-semibold text-green-900 mb-2">📱 How to Scan:</h3>
-        <ol className="text-sm text-green-800 space-y-1 list-decimal list-inside">
-          <li>Open WhatsApp on your phone</li>
+      {/* Instructions Card */}
+      <div className="bg-elegant-card border border-accent-teal rounded-xl p-5 shadow-elegant">
+        <div className="flex items-center gap-2 mb-3">
+          <BiQrScan className="w-5 h-5 text-accent-teal" />
+          <h3 className="font-semibold text-text-primary">How to Scan</h3>
+        </div>
+        <ol className="text-sm text-text-secondary space-y-2 list-decimal list-inside">
+          <li>Open <span className="text-text-primary font-medium">WhatsApp</span> on your phone</li>
           <li>
-            Tap <strong>Menu</strong> or <strong>Settings</strong>
+            Tap <span className="text-text-primary font-medium">Menu</span> or <span className="text-text-primary font-medium">Settings</span>
           </li>
           <li>
-            Tap <strong>Linked Devices</strong>
+            Tap <span className="text-text-primary font-medium">Linked Devices</span>
           </li>
           <li>
-            Tap <strong>Link a Device</strong>
+            Tap <span className="text-text-primary font-medium">Link a Device</span>
           </li>
           <li>Point your phone at this screen to scan the QR code</li>
         </ol>
       </div>
 
+      {/* Waiting Status */}
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 text-sm text-gray-600">
-          <RiLoader2Fill className="w-4 h-4 animate-spin" />
+        <div className="inline-flex items-center gap-2 text-sm text-text-muted bg-elegant-elevated px-4 py-2 rounded-full">
+          <RiLoader2Fill className="w-4 h-4 animate-spin text-accent-purple" />
           <span>Waiting for QR code scan...</span>
         </div>
       </div>
