@@ -11,10 +11,13 @@ import { socket } from "../../../lib/socket";
 import { FaUserAlt } from "react-icons/fa";
 import { useAuthStore } from "../../auth/store/authStore";
 import { Link } from "react-router-dom";
+import { FiLogOut } from "react-icons/fi";
+import { useLogout } from "../../auth/hooks/useLogout";
 
 export default function AgentList() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuthStore();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   const isSuperAdmin = user?.role === "SUPER_ADMIN";
   const {
@@ -33,6 +36,12 @@ export default function AgentList() {
       socket.emit("whatsapp:qr-close", {
         whatsappNumberId: id,
       });
+    }
+  };
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      logout();
     }
   };
 
@@ -59,6 +68,7 @@ export default function AgentList() {
                 <button
                   className="p-2.5 bg-accent-purple hover:bg-accent-blue rounded-lg transition-all duration-300 hover-elegant shadow-elegant-purple"
                   onClick={() => setIsOpen(true)}
+                  title="Add Agent"
                 >
                   <IoMdAdd size={20} className="text-text-primary" />
                 </button>
@@ -66,10 +76,19 @@ export default function AgentList() {
                   <Link
                     to="/users"
                     className="p-2.5 bg-accent-teal hover:bg-accent-blue rounded-lg transition-all duration-300 hover-elegant shadow-elegant-teal"
+                    title="Manage Users"
                   >
                     <FaUserAlt size={18} className="text-text-primary" />
                   </Link>
                 )}
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="p-2.5 bg-error/80 hover:bg-error rounded-lg transition-all duration-300 hover-elegant shadow-elegant disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Logout"
+                >
+                  <FiLogOut size={18} className="text-text-primary" />
+                </button>
               </div>
             )}
           </div>

@@ -197,15 +197,15 @@ const MessageComponent = memo(function MessageComponent({ message }: { message: 
         {/* Timestamp */}
         <div className="flex items-center gap-1 mt-1 px-2">
           <span className="text-xs text-text-muted">
-            {formatTime(message.timestamp)}
+            {formatTime(message?.timestamp)}
           </span>
           {!isIncoming && (
             <span className="text-text-muted">
-              {message.status === 'SEEN' || message.status === 'PLAYED' ? (
+              {message?.status === 'SEEN' || message?.status === 'PLAYED' ? (
                 <BiCheckDouble className="w-4 h-4 text-neon-cyan" />
-              ) : message.status === 'DELIVERED' ? (
+              ) : message?.status === 'DELIVERED' ? (
                 <BiCheckDouble className="w-4 h-4" />
-              ) : message.status === 'SENT' ? (
+              ) : message?.status === 'SENT' ? (
                 <BiCheck className="w-4 h-4" />
               ) : (
                 <BiCheck className="w-4 h-4 text-text-muted" />

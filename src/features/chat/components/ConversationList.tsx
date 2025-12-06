@@ -45,8 +45,8 @@ export default function ConversationList({
             <div className="flex-1 min-w-0">
               {/* Customer Name & Time */}
               <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2 flex-1">
-                  <p className="font-semibold text-text-primary truncate text-sm sm:text-base">
+                <div className="flex items-center gap-2 flex-1 truncate">
+                  <p className="font-semibold text-text-primary text-sm sm:text-base truncate">
                     {conversation.name || "Unknown Customer"}
                   </p>
                   {conversation.unreadCount > 0 && (
@@ -59,13 +59,13 @@ export default function ConversationList({
 
               {/* Customer Phone */}
               <div className="flex items-center gap-1 text-xs sm:text-sm text-text-secondary mb-1">
-                <span className="font-mono">{conversation.phone}</span>
+                <span className="font-mono">{conversation?.phone}</span>
               </div>
 
               {/* Last Message Preview */}
               <div className="flex items-center gap-1 text-xs sm:text-sm text-text-muted italic truncate">
-                <span className="text-xs text-accent-teal shrink-0">{formatTime(conversation.lastMessage.timestamp)}:</span>
-                <span className="truncate">{conversation.lastMessage.content}</span>
+                <span className="text-xs text-accent-teal shrink-0">{formatTime(conversation?.lastMessage?.timestamp || "")}:</span>
+                <span className="truncate">{conversation?.lastMessage?.content || ""}</span>
               </div>
             </div>
           </div>
