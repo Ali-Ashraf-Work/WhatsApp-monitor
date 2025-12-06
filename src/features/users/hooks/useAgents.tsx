@@ -22,8 +22,8 @@ export const useAgents = () => {
       password: string;
       role: "MANAGER" | "SUPER_ADMIN";
     }) => api.post("/agents", data),
-    onSuccess: (res) => {
-      toast.success(res.data.data.message);
+    onSuccess: () => {
+      toast.success("Successfully created!");
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
     onError: (error: AxiosError) => console.log(error.response?.data),

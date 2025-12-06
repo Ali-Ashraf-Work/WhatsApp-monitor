@@ -8,7 +8,7 @@ export const useDeleteContact = () => {
     mutationFn: (phoneNumberId: string) =>
       api.delete(`/whatsapp-numbers/${phoneNumberId}`),
     onSuccess: () => {
-      toast.success("Successfully toasted!");
+      toast.success("Successfully deleted");
       queryClient.invalidateQueries({ queryKey: ["agents"] });
     },
     onError: (error: AxiosError) => console.log(error.response?.data),

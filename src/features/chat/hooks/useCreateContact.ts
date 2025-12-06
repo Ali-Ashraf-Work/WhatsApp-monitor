@@ -7,8 +7,8 @@ export const useCreateContact = () => {
   return useMutation({
     mutationFn: (data: { displayName: string; }) =>
       api.post("/whatsapp-numbers", data),
-    onSuccess: (res) => {
-      toast.success(res.data.data.message);
+    onSuccess: () => {
+      toast.success("Successfully created!");
       queryClient.invalidateQueries({ queryKey: ["agents"] });
     },
     onError: (error: AxiosError) => console.log(error.response?.data),
